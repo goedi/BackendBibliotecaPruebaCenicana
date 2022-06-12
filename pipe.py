@@ -1,5 +1,5 @@
-from asyncio.windows_events import NULL
-from curses.ascii import NUL
+
+from model import AutorArticulo
 
 
 class pipe:
@@ -7,14 +7,14 @@ class pipe:
         if(estado == 1):
             mensaje = {
                 'codigo': 200,
-                'mensaje': 'Acción exitosa se envia resultado',
+                'mensaje': 'Accion exitosa se envia resultado',
                 'respuesta': resultado
             }
         else:
             mensaje = {
                 'codigo': 400,
                 'mensaje': 'Hubo un error en el servicio',
-                'respuesta': NULL
+                'respuesta': resultado
             }
         return mensaje
 
@@ -26,4 +26,8 @@ class pipe:
             array.append(temp)
         return array
 
-
+    def relacion(array, id_articulo):
+        temp = []
+        for item in array:
+            temp.append(AutorArticulo(id_articulo, item['identificacion']))
+        return temp

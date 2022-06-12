@@ -1,4 +1,3 @@
-from sqlalchemy.sql import text
 from model import Libro, Autor, Articulo
 from ConexionBD import *
 
@@ -6,16 +5,23 @@ from ConexionBD import *
 # *************************************************************************
 # *************************************************************************
 def crearAutor(autor):
-    db = ConexionBD()
-    db.getConexion().add(autor)
-    db.getConexion().commit()
-    db.cerrarConexion()
+    try:
+        db = ConexionBD()
+        db.getConexion().add(autor)
+        db.getConexion().commit()
+        db.cerrarConexion()
+    except Exception as err:
+        print(err.args)
 
 def listarAutores():
-    db =ConexionBD()
-    productos = db.getConexion().query(Autor).all()
-    db.cerrarConexion()
-    return productos
+    try:
+        db = ConexionBD()
+        productos = db.getConexion().query(Autor).all()
+        db.cerrarConexion()
+        return productos
+    except TypeError as err:
+        print(err.args)
+        return None
 
 # *************************************************************************
 # *************************************************************************
@@ -27,7 +33,7 @@ def crearLibro(libro):
     db.cerrarConexion()
 
 def listarLibros():
-    db =ConexionBD()
+    db = ConexionBD()
     productos = db.getConexion().query(Libro).all()
     db.cerrarConexion()
     return productos
@@ -42,7 +48,14 @@ def crearArticulo(articulo):
     db.cerrarConexion()
 
 def listarArticulos():
-    db =ConexionBD()
+    db = ConexionBD()
     carrito = db.getConexion().query(Articulo).all()
     db.cerrarConexion()
     return carrito
+
+
+def crearAsociacion(autor_articulo):
+    db = ConexionBD()
+    db.getConexion().add_all(autor_articulo)
+    db.getConexion().commit()
+    db.cerrarConexion()
