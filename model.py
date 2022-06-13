@@ -30,8 +30,9 @@ class Autor(Base):
         self.estado = estado
 
     def __repr__(self):
-        return "<Producto (identificacion = ' % s ', nombres = ' % s ', apellidos = ' % s ', biografia = ' % s ', fecha_nacimiento = ' % s ', fecha_muerte = ' % s', rutaImg = ' % s', estado = ' % s')>" % (
+        return "<Autor (identificacion = ' % s ', nombres = ' % s ', apellidos = ' % s ', biografia = ' % s ', fecha_nacimiento = ' % s ', fecha_muerte = ' % s', rutaImg = ' % s', estado = ' % s')>" % (
             self.identificacion, self.nombres, self.apellidos, self.biografia, self.fecha_nacimiento, self.fecha_muerte, self.ruta_img, self.estado)
+
 
 
 class Libro(Base):
@@ -41,7 +42,7 @@ class Libro(Base):
     fecha_publicacion = Column(Date)
     idioma_original = Column(String(10))
     resumen = Column(String)
-    id_autor = Column(String, ForeignKey("autor.identificacion"))
+    id_autor = Column(String, ForeignKey("autor.identificacion"), unique=True)
     estado = Column(Boolean, default=True)
     parent = relationship("Autor", backref=backref("libro", uselist=False))
 
@@ -55,7 +56,7 @@ class Libro(Base):
         self.estado = estado
 
     def __repr__(self):
-        return "<Carrito (ISBN = ' % s  ', titulo = ' % s ', fecha_publicacion = ' % s ', idioma_original = ' % s', resumen = ' % s', id_autor = ' % s', estado = ' % s')>" % (
+        return "<libro (ISBN = ' % s  ', titulo = ' % s ', fecha_publicacion = ' % s ', idioma_original = ' % s', resumen = ' % s', id_autor = ' % s', estado = ' % s')>" % (
             self.ISBN, self.titulo, self.fecha_publicacion, self.idioma_original, self.resumen, self.id_autor, self.estado)
 
 
@@ -104,7 +105,7 @@ class Articulo(Base):
         self.estado = estado
 
     def __repr__(self):
-        return "<producto_carrito (ISSN = ' % s ', paginas = ' % s ', titulo = ' % s ', cantidad = ' % s', resumen = ' % s', estado = ' % s')>" % (
+        return "<articulo (ISSN = ' % s ', paginas = ' % s ', titulo = ' % s ', cantidad = ' % s', resumen = ' % s', estado = ' % s')>" % (
             self.issn, self.paginas, self.titulo, self.publicacion, self.resumen, self.estado)
 
 

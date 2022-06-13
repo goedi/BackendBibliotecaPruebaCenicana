@@ -1,0 +1,19 @@
+Requerimientos:
+
+Puede seleccionar entre las siguientes tecnologías para realizar el punto
+
+FrontEnd: Algún framework JavaScript (Vue, React)
+Backend: Algún framework (PHP o Phyton)
+Base de datos Postgres
+
+Tener en cuenta para el CRUD solamente el registro de obras literarias (artículos o libros). La información de los autores puede estar cargada ya en base de datos.
+
+Tanto Backend como en FrontEnd deben estar en un proyecto git versionados con sus respectivos commit.
+
+Un autor puede tener solo un libro
+Un autor pudo haber escrito uno o más artículos
+Un artículo puede haber sido escrito por uno o más autores
+Mostrar una tabla con la producción literaria de un autor, donde se pueda filtrar por nombre, fecha de publicación entre otros datos.
+Realizar una gráfica comparativa con número de libros y artículos por autor realizados a través de los años.
+
+Plus: Realizar la autenticación de usuarios. La  realización de este punto brindará puntos extras.

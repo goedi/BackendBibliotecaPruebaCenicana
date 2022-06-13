@@ -1,4 +1,4 @@
-from contoler import crearArticulo, crearAsociacion, crearAutor, crearLibro, listarArticulos, listarAutores, listarLibros
+from contoler import buscarUnLibro, crearArticulo, crearAsociacion, crearAutor, crearLibro, deleteLibro, listarArticulos, listarAutores, listarLibros, updateLibro
 from flask import request
 from flask import Flask, jsonify
 from flask_cors import CORS
@@ -26,7 +26,6 @@ def listadoAutores():
 @app.route("/api/autor/create", methods=['POST'])
 def autorCreate():
     data = request.json
-    print(request.json)
     autor = Autor(data['identificacion'], data['nombres'], data['apellidos'],
                   data['biografia'], data['fecha_nacimiento'], data['fecha_muerte'],
                   data['ruta_img'], data['estado'])
@@ -42,8 +41,9 @@ def autorCreate():
 @app.route("/api/libro/list", methods=['GET'])
 def libroList():
     array = listarLibros()
+
     if len(array) > 0:
-        return pipe.respuesta(pipe.objToDict(array), 1)
+        return pipe.respuesta(array, 1)
     else:
         return pipe.respuesta(None, -1)
 
@@ -51,13 +51,46 @@ def libroList():
 @app.route("/api/libro/create", methods=['POST'])
 def LibroCreate():
     data = request.json
+
     libro = Libro(data['ISBN'], data['titulo'], data['fecha_publicacion'],
-                  data['idioma_original'], data['resumen'], data['id_autor'],
+                  data['idioma_original'], data['resumen'], data['id_autor']['identificacion'],
                   data['estado'])
+   
     crearLibro(libro)
     response = 'se creo el libro con exito'
 
     return pipe.respuesta(response, 1)
+
+@app.route("/api/libro/buscar/<isbn>", methods=['GET'])
+def buscarLibro(isbn):
+    #data = request.json
+    array = buscarUnLibro(isbn)
+    if len(array) > 0:
+        return pipe.respuesta(array, 1)
+    else:
+        return pipe.respuesta(None, -1)
+
+
+@app.route("/api/libro/update", methods=['POST'])
+def actualizarLibro():
+    data = request.json
+    libro = Libro(data['ISBN'], data['titulo'], data['fecha_publicacion'],
+                  data['idioma_original'], data['resumen'], data['id_autor']['identificacion'],
+                  data['estado'])
+    updateLibro(libro)
+    return pipe.respuesta('respuesta ok', 1)
+
+
+@app.route("/api/libro/delete", methods=['POST'])
+def eliminarLibro():
+    data = request.json
+    print(data)
+    libro = Libro(data['ISBN'], data['titulo'], data['fecha_publicacion'],
+                  data['idioma_original'], data['resumen'], data['id_autor']['identificacion'],
+                  data['estado'])
+    deleteLibro(libro)
+    return pipe.respuesta('respuesta ok', 1)
+
 
 # *************************************************************************
 # *************************************************************************
@@ -68,7 +101,7 @@ def LibroCreate():
 def articuloList():
     array = listarArticulos()
     if len(array) > 0:
-        return pipe.respuesta(pipe.objToDict(array), 1)
+        return pipe.respuesta(array, 1)
     else:
         return pipe.respuesta(None, -1)
 
@@ -84,7 +117,7 @@ def articuloCreate():
     crearArticulo(articulo)
     crearAsociacion(pipe.relacion(dataAutor, data['issn']))
 
-    response = 'se creo el libro con exito'
+    response = 'se creo el Articulo con exito'
 
     return pipe.respuesta(response, 1)
 

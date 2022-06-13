@@ -31,3 +31,8 @@ class pipe:
         for item in array:
             temp.append(AutorArticulo(id_articulo, item['identificacion']))
         return temp
+
+    def libroConAutor(diccionario):
+        print(diccionario)
+        array  = []
+        
