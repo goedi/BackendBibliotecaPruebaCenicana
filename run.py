@@ -1,4 +1,4 @@
-from contoler import buscarUnLibro, crearArticulo, crearAsociacion, crearAutor, crearLibro, deleteLibro, listarArticulos, listarAutores, listarLibros, updateLibro
+from contoler import *
 from flask import request
 from flask import Flask, jsonify
 from flask_cors import CORS
@@ -55,15 +55,15 @@ def LibroCreate():
     libro = Libro(data['ISBN'], data['titulo'], data['fecha_publicacion'],
                   data['idioma_original'], data['resumen'], data['id_autor']['identificacion'],
                   data['estado'])
-   
+
     crearLibro(libro)
     response = 'se creo el libro con exito'
 
     return pipe.respuesta(response, 1)
 
+
 @app.route("/api/libro/buscar/<isbn>", methods=['GET'])
 def buscarLibro(isbn):
-    #data = request.json
     array = buscarUnLibro(isbn)
     if len(array) > 0:
         return pipe.respuesta(array, 1)
@@ -84,7 +84,6 @@ def actualizarLibro():
 @app.route("/api/libro/delete", methods=['POST'])
 def eliminarLibro():
     data = request.json
-    print(data)
     libro = Libro(data['ISBN'], data['titulo'], data['fecha_publicacion'],
                   data['idioma_original'], data['resumen'], data['id_autor']['identificacion'],
                   data['estado'])
@@ -106,10 +105,19 @@ def articuloList():
         return pipe.respuesta(None, -1)
 
 
+@app.route("/api/articulo/buscar/<issn>", methods=['GET'])
+def buscarArticulo(issn):
+    array = buscarUnArticulo(issn)
+    if len(array) > 0:
+        return pipe.respuesta(array, 1)
+    else:
+        return pipe.respuesta(None, -1)
+
+
 @app.route("/api/articulo/create", methods=['POST'])
 def articuloCreate():
     data = request.json
-    dataAutor = data['id_autor']
+    dataAutor = data['autores']
 
     articulo = Articulo(data['titulo'], data['issn'], data['paginas'],
                         data['fecha_publicacion'], data['publicacion'], data['resumen'],
@@ -120,6 +128,64 @@ def articuloCreate():
     response = 'se creo el Articulo con exito'
 
     return pipe.respuesta(response, 1)
+
+
+@app.route("/api/articulo/update", methods=['POST'])
+def articuloUpdate():
+    data = request.json
+
+    dataAutor = data['autores']
+    print('llega', data)
+    articulo = Articulo(data['titulo'], data['issn'], data['paginas'],
+                        data['fecha_publicacion'], data['publicacion'], data['resumen'],
+                        data['estado'])
+    print('route', articulo)
+    updateArticulo(articulo, dataAutor)
+    response = 'se actuallizo el Articulo con exito'
+
+    return pipe.respuesta(response, 1)
+
+
+@app.route("/api/articulo/delete", methods=['POST'])
+def eliminarArticulo():
+    data = request.json
+    articulo = Articulo(data['titulo'], data['issn'], data['paginas'],
+                        data['fecha_publicacion'], data['publicacion'], data['resumen'],
+                        data['estado'])
+    deleteArticulo(articulo)
+    return pipe.respuesta('respuesta ok', 1)
+
+# *************************************************************************
+# *************************************************************************
+# *************************************************************************
+
+
+@app.route("/api/autor/con_publicaciones", methods=["GET"])
+def autoresConPublicaciones():
+    array = []
+    array = autoresPublicaron()
+    return pipe.respuesta(array, 1)
+
+@app.route("/api/autor/publicaciones/<id>", methods=["GET"])
+def publicaciones(id):
+    array = []
+    array = publicacionLibros(id)
+    array2 = publicacionArticulos(id)
+    for r in array2:
+        array.append(r)
+
+    return pipe.respuesta(array, 1)
+
+
+@app.route("/api/autor/total_publicaciones", methods=["GET"])
+def totalPublicaciones():
+    array = []
+    array = totalLibro()
+    array2 = totalArticulos()
+    for r in array2:
+        array.append(r)
+
+    return pipe.respuesta(array, 1)
 
 
 if __name__ == "__main__":

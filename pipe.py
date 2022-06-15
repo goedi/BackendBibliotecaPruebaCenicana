@@ -32,7 +32,10 @@ class pipe:
             temp.append(AutorArticulo(id_articulo, item['identificacion']))
         return temp
 
-    def libroConAutor(diccionario):
-        print(diccionario)
-        array  = []
-        
+    def publicaciones(array):
+        array = []
+        print('llego', array)
+        for item in array:
+            print(type(item))
+            temp = {'codigo':item[0], 'titulo': item[1], 'fecha': item[2], 'tipo': item[3]}
+            print(temp)
